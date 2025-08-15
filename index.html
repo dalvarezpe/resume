@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bolivia Data | Open Data</title>
+  <style>
+    /* Reset & global layout */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    html, body {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    body {
+      background-color: #f8f9fa;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    main {
+      flex: 1;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 15px;
+    }
+
+    /* Header */
+    header {
+      background: linear-gradient(135deg, #6e48aa 0%, #9d50bb 100%);
+      color: white;
+      padding: 15px 0;
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-weight: bold;
+      font-size: 1.5rem;
+      text-decoration: none;
+      color: white;
+    }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+    }
+
+    .nav-links li {
+      margin-left: 20px;
+    }
+
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      font-size: 1rem;
+    }
+
+    .nav-links a.active {
+      font-weight: bold;
+      border-bottom: 2px solid white;
+    }
+
+    /* Search */
+    .search-section {
+      padding: 30px 0;
+    }
+
+    .search-container {
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .search-title {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 1.2rem;
+    }
+
+    .search-group {
+      display: flex;
+      margin-bottom: 15px;
+    }
+
+    .search-input {
+      flex: 1;
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+      border-radius: 25px 0 0 25px;
+      font-size: 1rem;
+      outline: none;
+    }
+
+    .search-button {
+      padding: 12px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 0 25px 25px 0;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .search-examples {
+      text-align: center;
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    .search-examples a {
+      color: #6e48aa;
+      text-decoration: none;
+    }
+
+    .example-link {
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+
+    .example-link:hover {
+      color: #9d50bb;
+      text-decoration: underline;
+    }
+
+    /* Dashboards */
+    .dashboards-section {
+      padding: 20px 0;
+    }
+
+    .section-title {
+      margin-bottom: 20px;
+      font-size: 1.2rem;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+    }
+
+    .dashboard-card {
+      background: white;
+      border-radius: 15px;
+      padding: 15px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .dashboard-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+
+    .card-graphic {
+      height: 100px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .card-graphic img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .card-title {
+      font-size: 1rem;
+      margin-bottom: 5px;
+    }
+
+    .card-description {
+      font-size: 0.8rem;
+      color: #666;
+    }
+
+    /* Quick stats */
+    .quick-stats {
+      padding: 20px 0;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .stat-card {
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      display: flex;
+      align-items: center;
+    }
+
+    .stat-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 10px;
+    }
+
+    .stat-icon.population {
+      background-color: rgba(23, 162, 184, 0.1);
+      color: #17a2b8;
+    }
+
+    .stat-icon.gdp {
+      background-color: rgba(255, 193, 7, 0.1);
+      color: #ffc107;
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: #666;
+    }
+
+    .stat-value {
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+
+    /* Footer */
+    footer {
+      background-color: #343a40;
+      color: white;
+      padding: 30px 0;
+      margin-top: 40px;
+    }
+
+    .footer-content {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .footer-row {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .copyright {
+      margin-bottom: 15px;
+      font-size: 0.9rem;
+    }
+
+    .footer-buttons {
+      display: flex;
+      justify-content: flex-start;
+    }
+
+    .footer-button {
+      padding: 8px 15px;
+      border: 1px solid white;
+      border-radius: 20px;
+      color: white;
+      text-decoration: none;
+      font-size: 0.8rem;
+      margin-right: 10px;
+      transition: background-color 0.3s;
+    }
+
+    .footer-button:hover {
+      background-color: rgba(255,255,255,0.1);
+    }
+
+    /* Nuevos estilos para los enlaces en las cards */
+    .card-link {
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+
+    @media (min-width: 768px) {
+      .footer-row {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .footer-buttons {
+        justify-content: flex-end;
+      }
+
+      .copyright {
+        margin-bottom: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="header-content">
+        <a href="/" class="logo">📊 Bolivia Data Hub</a>
+        <ul class="nav-links">
+          <li><a href="/" class="active">Home</a></li>
+            <!-- <li><a href="https://household-paso-markets-inclusion.trycloudflare.com" target="_blank">Indicators</a></li>  -->
+          <li><a href="cv.html">Recruiters</a></li>
+        </ul>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="search-section">
+      <div class="container">
+        <div class="search-container">
+          <h2 class="search-title">🔍 Data Search</h2>
+          <form id="search-form" class="search-group">
+            <input type="text" id="search-input" class="search-input" placeholder="Ex: GDP,energy, gold..." required>
+            <button type="submit" class="search-button">Search</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <section class="dashboards-section">
+      <div class="container">
+        <h2 class="section-title">📈 Dashboards</h2>
+        <div class="dashboard-grid">
+          <div class="dashboard-card">
+            <a href="https://app.escalardata.com/pci-dashboard/" class="card-link">
+              <div class="card-graphic">
+                <img src="assets/images/inflation.png" alt="Inflation Graph">
+              </div>
+              <h3 class="card-title">Annual Inflation</h3>
+              <p class="card-description">Percentage variation</p>
+            </a>
+          </div>
+          <div class="dashboard-card">
+            <a href="https://app.escalardata.com/exports-dashboard/" class="card-link">
+              <div class="card-graphic">
+                <img src="assets/images/exports.png" alt="Exports Chart">
+              </div>
+              <h3 class="card-title">Exports</h3>
+              <p class="card-description">By product and destination</p>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="quick-stats">
+      <div class="container">
+        <h2 class="section-title">⚡ Quick Stats</h2>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon population">👥</div>
+            <div>
+              <p class="stat-label">Total Population</p>
+              <p class="stat-value">12.3M</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon gdp">💰</div>
+            <div>
+              <p class="stat-label">GDP Per Capita</p>
+              <p class="stat-value">$3,450</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-row">
+          <p class="copyright">© 2025 Copyright: <strong>Daniel Alvarez Perez</strong></p>
+          <div class="footer-buttons">
+            <a href="cv.html" class="footer-button">For Recruiters</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
